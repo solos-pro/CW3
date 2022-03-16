@@ -1,0 +1,55 @@
+POST http://localhost:5000/auth/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "vasia",
+  "password": "my_little_pony"
+}
+
+###
+POST http://localhost:5000/auth/
+Accept: application/json
+Content-Type: application/json
+
+{
+  "username": "vasia",
+  "password": "WRONG passw"
+}
+
+###
+
+GET http://localhost:5000/directors/
+Accept: application/json
+
+###
+
+GET http://localhost:5000/directors/100
+Accept: application/json
+
+###
+
+PUT http://localhost:5000/directors/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "new_name"
+}
+
+###
+
+DELETE http://localhost:5000/directors/1
+Accept: application/json
+
+###
+
+PATCH http://localhost:5000/directors/1
+Accept: application/json
+Content-Type: application/json
+
+{
+  "name": "ha-ha"
+}
+
+###

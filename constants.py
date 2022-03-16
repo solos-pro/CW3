@@ -7,6 +7,3 @@ PWD_HASH_ALGO = 'sha256'
 SECRET = "secret"
 REFRESH_TOKEN_EXPIRATION = 30 # days
 ACCESS_TOKEN_EXPIRATION = 180 # minutes
-
-
-
