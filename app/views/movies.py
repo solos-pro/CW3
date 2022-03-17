@@ -13,7 +13,10 @@ movie_schema_search = MovieSchemaSearch()
 class MoviesView(Resource):
     @login_required
     def get(self):
-        search_request = {"director_id": request.args.get('director_id'), "genre_id": request.args.get('genre_id')}
+        search_request = {"director_id": request.args.get('director_id'),
+                          "genre_id": request.args.get('genre_id'),
+                          "status": request.args.get("status"),
+                          "page": request.args.get("page")}
         result = movie_service.search(search_request)
         return movie_schema_search.dump(result, many=True), 200
 
