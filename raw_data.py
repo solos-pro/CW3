@@ -200,9 +200,9 @@ genres = [
     {"name": "Мультфильм", "pk": 16}, {"name": "Вестерн", "pk": 17}, {"name": "Мюзикл", "pk": 18}]
 
 users = [
-    {"username": "vasya", "password": "my_little_pony", "role_id": "2"},
-    {"username": "oleg", "password": "qwerty", "role_id": "2"},
-    {"username": "ivan", "password": "ssw0rd", "role_id": "1"}
+    {"name": "vasya", "surname": "vasiliev", "password": "my_little_pony", "email": "zoo@mail.ru", "favorite_genre_id": "5"},
+    {"name": "oleg", "surname": "getmanov", "password": "qwerty", "email": "oleg@rambler.ru", "favorite_genre_id": "11"},
+    {"name": "ivan", "surname": "ivanov", "password": "ssw0rd", "email": "ussr@yandex.ru", "favorite_genre_id": "1"}
 ]
 
 roles = [

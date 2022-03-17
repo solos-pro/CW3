@@ -8,10 +8,10 @@ from app.database import db
 #     role = db.Column(db.String, unique=True)
 
 
-class Favorite(db.Model):
-    __tablename__ = 'favorite'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, unique=True)
+# class Favorite(db.Model):
+#     __tablename__ = 'favorite'
+#     id = db.Column(db.Integer, primary_key=True)
+#     name = db.Column(db.String, unique=True)
 
 
 class User(db.Model):
@@ -21,8 +21,8 @@ class User(db.Model):
     password = db.Column(db.String, unique=True)
     name = db.Column(db.String)
     surname = db.Column(db.String)
-    favorite_genre_id = db.Column(db.String, db.ForeignKey("favorite.id"))
-    favorite_genre = db.relationship("Favorite")
+    favorite_genre_id = db.Column(db.String, db.ForeignKey("genre.id"))
+    favorite_genre = db.relationship("Genre")
 
 
     # role_id = db.Column(db.String, db.ForeignKey("group.id"))
