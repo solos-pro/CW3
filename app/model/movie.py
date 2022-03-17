@@ -1,6 +1,8 @@
 from marshmallow import Schema, fields
 from app.database import db
 
+# TODO: Why class Genre isn't imported from a genre-model?
+
 
 class Movie(db.Model):
     __tablename__ = 'movie'

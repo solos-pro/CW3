@@ -23,7 +23,7 @@ def login_required(func):
             # token_data: Dict[int, Any] = JwtSchema().load(data)
             token_data = JwtSchema().load(data)
 
-            # return func(*args, **kwargs, token_data=token_data)   # TODO: Why it doesn't work?
+            # return func(*args, **kwargs, token_data=token_data)
             return func(*args, **kwargs)
         except (PyJWTError, ValidationError):
             abort(401)

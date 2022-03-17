@@ -27,7 +27,7 @@ class JwtToken:
         self._data.update({
             "exp": timegm((self._now + time_delta).timetuple())
         })
-        return jwt.encode(self._data, SECRET, algorithm="HS256") # TODO: Why "HS256"? PWD_HASH_ALGO = 'sha256'
+        return jwt.encode(self._data, SECRET, algorithm="HS256")
 
     def _refresh_token(self) -> str:
         token2 = self._get_token(time_delta=timedelta(days=REFRESH_TOKEN_EXPIRATION))

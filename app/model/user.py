@@ -2,10 +2,16 @@ from marshmallow import Schema, fields
 from app.database import db
 
 
-class Group(db.Model):
-    __tablename__ = 'group'
+# class Group(db.Model):
+#     __tablename__ = 'group'
+#     id = db.Column(db.Integer, primary_key=True)
+#     role = db.Column(db.String, unique=True)
+
+
+class Favorite(db.Model):
+    __tablename__ = 'favorite'
     id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String, unique=True)
+    name = db.Column(db.String, unique=True)
 
 
 class User(db.Model):
@@ -15,7 +21,8 @@ class User(db.Model):
     password = db.Column(db.String, unique=True)
     name = db.Column(db.String)
     surname = db.Column(db.String)
-    favorite_genre_id = db.Column("")
+    favorite_genre_id = db.Column(db.String, db.ForeignKey("favorite.id"))
+    favorite_genre = db.relationship("Favorite")
 
 
     # role_id = db.Column(db.String, db.ForeignKey("group.id"))
@@ -24,8 +31,12 @@ class User(db.Model):
 
 class UserSchema(Schema):
     id = fields.Int()
+    email = fields.Str()
     name = fields.Str()
-    # password = fields.Str(load_only=True)
+    surname = fields.Str()
+    password = fields.Str(load_only=True)
+    favorite_genre = fields.Str()
+
     # role = fields.Str()
 
 
