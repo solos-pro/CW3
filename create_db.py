@@ -44,19 +44,21 @@ class Movie(db.Model):
     director = db.relationship('Director')
 
 
-class Group(db.Model):
-    __tablename__ = 'group'
-    id = db.Column(db.Integer, primary_key=True)
-    role = db.Column(db.String(20), unique=True)
+# class Group(db.Model):
+#     __tablename__ = 'group'
+#     id = db.Column(db.Integer, primary_key=True)
+#     role = db.Column(db.String(20), unique=True)
 
 
 class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(50), unique=False)
-    password = db.Column(db.String(50))
-    role_id = db.Column(db.Integer, db.ForeignKey("group.id"))
-    role = db.relationship("Group")
+    email = db.Column(db.String, unique=True)
+    password = db.Column(db.String, unique=True)
+    name = db.Column(db.String)
+    surname = db.Column(db.String)
+    favorite_genre_id = db.Column(db.String, db.ForeignKey("genre.id"))
+    favorite_genre = db.relationship("Genre")
 
 
 db.drop_all()
@@ -90,25 +92,14 @@ def get_password_hash(password: str) -> str:
 #     return base64.b64encode(result)
 
 
-for role in raw_data.roles:
-    data = Group(
-        role=role["role"]
-    )
+# for role in raw_data.roles:
+#     data = Group(
+#         role=role["role"]
+#     )
+#
+#     with db.session.begin():
+#         db.session.add(data)
 
-    with db.session.begin():
-        db.session.add(data)
-
-for user in raw_data.users:
-    password = user["password"]
-
-    data = User(
-        username=user["username"],
-        role_id=user["role_id"],
-        password=get_password_hash(user["password"])
-    )
-
-    with db.session.begin():
-        db.session.add(data)
 
 for director in raw_data.directors:
     d = Director(
@@ -118,6 +109,7 @@ for director in raw_data.directors:
     with db.session.begin():
         db.session.add(d)
 
+
 for genre in raw_data.genres:
     d = Genre(
         id=genre["pk"],
@@ -125,6 +117,22 @@ for genre in raw_data.genres:
     )
     with db.session.begin():
         db.session.add(d)
+
+
+for user in raw_data.users:
+    password = user["password"]
+
+    data = User(
+        name=user["name"],
+        surname=user["surname"],
+        email=user["email"],
+        favorite_genre_id=user["favorite_genre_id"],
+        password=get_password_hash(user["password"])
+    )
+
+    with db.session.begin():
+        db.session.add(data)
+
 
 for movie in raw_data.movies:
     m = Movie(
