@@ -9,27 +9,26 @@ auth_ns = Namespace('auth')
 
 
 class LoginValidator(Schema):
-    username = fields.Str(required=True)
+    name = fields.Str(required=True)
     password = fields.Str(required=True)
-    role = fields.Str()
 
 
 @auth_ns.route('/')
 class AuthView(Resource):
     def post(self):
         """Create token"""
-        try:
-            validated_data = LoginValidator().load(request.json)
-            user = user_service.get_by_username(validated_data['username'])
-            if not user:
-                print("None user")
-                abort(404)
+        # try:
+        validated_data = LoginValidator().load(request.json)
+        user = user_service.get_by_username(validated_data['name'])
+        if not user:
+            print("None user")
+            abort(404)
 
-            token_data = jwt.JwtSchema().load({'user_id': user.id, 'role': user.role_id})
-            return jwt.JwtToken(token_data).get_tokens(), 201
+        token_data = jwt.JwtSchema().load({'user_id': user.id}) # , 'role': user.role_id
+        return jwt.JwtToken(token_data).get_tokens(), 201
 
-        except ValidationError:
-            abort(400)
+        # except ValidationError:
+        #     abort(400)
 
     def put(self):
         """Update token"""

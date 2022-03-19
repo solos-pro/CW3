@@ -12,37 +12,39 @@ class UserDAO:
         self.session = session
         self._roles = {"user", "admin"}
 
-    def create_role(self, role) -> int:
-        group = Group(role=role)
-        self.session.add(group)
-        self.session.flush()
-        self.session.commit()
-        print(group.id)
-        return group.id
+    # def create_role(self, role) -> int:
+    #     group = Group(role=role)
+    #     self.session.add(group)
+    #     self.session.flush()
+    #     self.session.commit()
+    #     print(group.id)
+    #     return group.id
 
-    def get_role(self, role):
-        return self.session.query(Group).filter_by(role=role).one_or_none()
+    # def get_role(self, role):
+    #     return self.session.query(Group).filter_by(role=role).one_or_none()
 
     def get_one_by_id(self, id):
         return self.session.query(User).get(id)
 
     def get_one_by_username(self, username) -> Optional[User]:
-        return self.session.query(User).filter(User.username == username).one_or_none()
+        tech = self.session.query(User).filter(User.name == username).one_or_none()
+        print(tech.name)
+        return self.session.query(User).filter(User.name == username).one_or_none()
 
     def get_all(self):
         return self.session.query(User).all()
 
     def create(self, data):
         try:
-            role = data.pop('role')
-            group = Group.query.filter_by(role=role).one_or_none()
-            if not group:
-                group = Group(role=role)
-                self.session.add(group)
-                self.session.commit()
-
-            data['role_id'] = group.id
-            print(data, "DAO_create")
+            # role = data.pop('role')
+            # group = Group.query.filter_by(role=role).one_or_none()
+            # if not group:
+            #     group = Group(role=role)
+            #     self.session.add(group)
+            #     self.session.commit()
+            #
+            # data['role_id'] = group.id
+            # print(data, "DAO_create")
             user = User(**data)
             self.session.add(user)
             self.session.commit()

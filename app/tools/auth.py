@@ -20,11 +20,11 @@ def login_required(func):
             data = JwtToken.decode_token(auth_header.split("Bearer ")[-1])
             print(data)
             data.pop("exp", None)
-            # token_data: Dict[int, Any] = JwtSchema().load(data)
-            token_data = JwtSchema().load(data)
+            token_data: Dict[int, Any] = JwtSchema().load(data)
+            # token_data = JwtSchema().load(data)
 
-            # return func(*args, **kwargs, token_data=token_data)
-            return func(*args, **kwargs)
+            return func(*args, **kwargs, token_data=token_data)
+            # return func(*args, **kwargs)
         except (PyJWTError, ValidationError):
             abort(401)
 

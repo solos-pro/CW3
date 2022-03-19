@@ -15,17 +15,17 @@ class UserService:
     def get_one(self, uid):
         return self.dao.get_one_by_username(uid)
 
-    def get_by_username(self, username) -> Optional[User]:
-        user = self.dao.get_one_by_username(username)
-        print(user.id, user.role_id, "(UserService)")
+    def get_by_username(self, name) -> Optional[User]:
+        user = self.dao.get_one_by_username(name)
+        print(user.id, "(UserService)")
 
-        return self.dao.get_one_by_username(username)
+        return self.dao.get_one_by_username(name)
 
-    def create(self, username, password, role: str = "user"):
+    def create(self, name, password):
         return self.dao.create({
-            "username": username,
-            "password": get_password_hash(password),
-            "role": role
+            "name": name,
+            "password": get_password_hash(password)
+            # "role": role
         })
 
     def create_alternative(self, username, password, role: str = "user"):
