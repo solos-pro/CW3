@@ -1,9 +1,12 @@
+from werkzeug.exceptions import BadRequest
+
 import app.tools.jwt_token as jwt
 from flask import request
 from flask_restx import Resource, Namespace, abort
 from marshmallow import Schema, fields, ValidationError
 
 from app.container import user_service
+from app.exceptions import DuplicateError
 
 auth_ns = Namespace('auth')
 
@@ -11,6 +14,13 @@ auth_ns = Namespace('auth')
 class LoginValidator(Schema):
     email = fields.Str(required=True)
     password = fields.Str(required=True)
+
+class RegisterValidator(Schema):
+    email = fields.Str(required=True)
+    password = fields.Str(required=True)
+    name = fields.Str()
+    surname = fields.Str()
+    favorite_genre_id = fields.Int()
 
 
 @auth_ns.route('/login')
@@ -48,17 +58,15 @@ class AuthView(Resource):
 
 @auth_ns.route('/register')
 class AuthRegisterView(Resource):
+
     def post(self):
-        """Create token"""
+        """ Create user """
         try:
-            validated_data = LoginValidator().load(request.json)
-            user = user_service.get_by_email(validated_data['email'])
-            if not user:
-                print("None email")
-                abort(404)
-
-            token_data = jwt.JwtSchema().load({'user_id': user.id})  # , 'role': user.role_id
-            return jwt.JwtToken(token_data).get_tokens(), 201
-
+            user = user_service.create_alternative(**RegisterValidator().load(request.json)) # create_alternative
+            return f'User {user} created'
         except ValidationError:
-            abort(400)
+            raise BadRequest
+        except DuplicateError:
+            return 'Username already exists', 404
+
+

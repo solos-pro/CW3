@@ -24,28 +24,30 @@ class UserService:
     def get_by_email(self, email) -> Optional[User]:
         return self.dao.get_one_by_email(email)
 
-    def create(self, name, password):
+    def create(self, email, password):
         return self.dao.create({
-            "name": name,
+            "email": email,
             "password": get_password_hash(password)
             # "role": role
         })
 
-    def create_alternative(self, username, password, role: str = "user"):
-        duplicate_username = self.dao.get_one_by_username(username=username)
-        if duplicate_username:
+    def create_alternative(self, **user):
+        duplicate_emale = self.dao.get_one_by_email(email=user["email"])
+        if duplicate_emale:
             raise DuplicateError
 
-        bd_role = self.dao.get_role(role)       # search ID of str(role) in the database
-        if bd_role:
-            role_id = bd_role.id
-            print('role_id=', role_id)
-        else:
-            role_id = self.dao.create_role(role)    # create a record in the database and return ID
+        # bd_role = self.dao.get_role(role)       # search ID of str(role) in the database
+        # if bd_role:
+        #     role_id = bd_role.id
+        #     print('role_id=', role_id)
+        # else:
+        #     role_id = self.dao.create_role(role)    # create a record in the database and return ID
         return self.dao.create_alternative({
-            "username": username,
-            "password": get_password_hash(password),
-            "role_id": role_id
+            "email": user["email"],
+            "password": get_password_hash(user["password"]),
+            "name": user["name"],
+            "surname": user["surname"],
+            "favorite_genre_id": user["favorite_genre_id"]
         })
 
     def update(self, data):
