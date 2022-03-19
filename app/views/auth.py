@@ -15,6 +15,7 @@ class LoginValidator(Schema):
     email = fields.Str(required=True)
     password = fields.Str(required=True)
 
+
 class RegisterValidator(Schema):
     email = fields.Str(required=True)
     password = fields.Str(required=True)

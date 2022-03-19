@@ -37,15 +37,6 @@ class UserDAO:
 
     def create(self, data):
         try:
-            # role = data.pop('role')
-            # group = Group.query.filter_by(role=role).one_or_none()
-            # if not group:
-            #     group = Group(role=role)
-            #     self.session.add(group)
-            #     self.session.commit()
-            #
-            # data['role_id'] = group.id
-            # print(data, "DAO_create")
             user = User(**data)
             self.session.add(user)
             self.session.commit()
@@ -55,7 +46,6 @@ class UserDAO:
 
     def create_alternative(self, data):
         try:
-            print(data)
             user = User(**data)
             self.session.add(user)
             self.session.commit()

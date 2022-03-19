@@ -28,20 +28,20 @@ class UserService:
         return self.dao.create({
             "email": email,
             "password": get_password_hash(password)
-            # "role": role
         })
 
     def create_alternative(self, **user):
-        duplicate_emale = self.dao.get_one_by_email(email=user["email"])
-        if duplicate_emale:
+        duplicate_email = self.dao.get_one_by_email(email=user["email"])
+        if duplicate_email:
             raise DuplicateError
 
-        # bd_role = self.dao.get_role(role)       # search ID of str(role) in the database
-        # if bd_role:
-        #     role_id = bd_role.id
-        #     print('role_id=', role_id)
-        # else:
-        #     role_id = self.dao.create_role(role)    # create a record in the database and return ID
+        if "name" not in user:
+            user["name"] = None
+        if "surname" not in user:
+            user["surname"] = None
+        if "favorite_genre_id" not in user:
+            user["favorite_genre_id"] = None
+
         return self.dao.create_alternative({
             "email": user["email"],
             "password": get_password_hash(user["password"]),
@@ -75,6 +75,5 @@ class UserService:
 
     def delete(self, mid):
         self.dao.delete(mid)
-
 
 # ===============================================================================
