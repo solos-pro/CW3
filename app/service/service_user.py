@@ -2,7 +2,7 @@ from app.dao.user_dao import UserDAO
 from app.exceptions import DuplicateError
 from app.tools.security import get_password_hash
 from typing import Optional
-from app.dao.user_dao import User, Group
+from app.dao.user_dao import User
 
 
 class UserService:

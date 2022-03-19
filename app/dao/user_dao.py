@@ -1,7 +1,7 @@
 # import sqlalchemy
 from typing import Optional
 from sqlalchemy.exc import IntegrityError
-from app.model.user import User, Group
+from app.model.user import User
 
 # CRUD
 from app.exceptions import IncorrectData, DuplicateError

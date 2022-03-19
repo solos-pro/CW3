@@ -11,12 +11,13 @@ movie_schema_search = MovieSchemaSearch()
 
 @movie_ns.route('/')
 class MoviesView(Resource):
-    @login_required
+    # @login_required
     def get(self):
         search_request = {"director_id": request.args.get('director_id'),
                           "genre_id": request.args.get('genre_id'),
                           "status": request.args.get("status"),
-                          "page": request.args.get("page")}
+                          "page": request.args.get("page")
+                          }
         result = movie_service.search(search_request)
         return movie_schema_search.dump(result, many=True), 200
 

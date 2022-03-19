@@ -1,4 +1,7 @@
+from sqlalchemy import desc
+
 from app.model.movie import Movie
+from constants import ITEMS_PER_PAGE
 
 
 # CRUD
@@ -12,10 +15,10 @@ class MovieDAO:
             result = result.filter(Movie.director_id == search_request["director_id"])
         if search_request["genre_id"]:
             result = result.filter(Movie.genre_id == search_request["genre_id"])
-        if search_request["status"]:
-                    result = result.sorted_by(Movie.year == search_request["genre_id"]) # TODO: descending sort
+        if search_request["status"] == 'new':
+                    result = result.order_by(desc(Movie.year))
         if search_request["page"]:
-                    result = result.filter(Movie.genre_id == search_request["genre_id"])
+                    result = result.limit(ITEMS_PER_PAGE).offset((int(search_request["page"]) - 1) * int(ITEMS_PER_PAGE))
 
         return result.all()
 
