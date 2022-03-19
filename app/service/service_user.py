@@ -13,7 +13,7 @@ class UserService:
         return self.dao.get_one_by_id(user)
 
     def get_one(self, uid):
-        return self.dao.get_one_by_username(uid)
+        return self.dao.get_one_by_id(uid)
 
     def get_by_username(self, name) -> Optional[User]:
         user = self.dao.get_one_by_username(name)

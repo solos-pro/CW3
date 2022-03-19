@@ -17,30 +17,31 @@ user_schema = UserSchema()
 class UserView(Resource):
     @login_required
     def get(self, token_data):
+        print(token_data)
         user = user_service.get_one(token_data['user_id'])
         if not user:
             return "", 404
         return user_schema.dump(user)
 
-    def post(self):
-        """ Create user """
-        try:
-            user_service.create(**LoginValidator().load(request.json))
-        except ValidationError:
-            raise BadRequest
-        except DuplicateError:
-            raise BadRequest('Username already exists')
+    # def post(self):
+    #     """ Create user """
+    #     try:
+    #         user_service.create(**LoginValidator().load(request.json))
+    #     except ValidationError:
+    #         raise BadRequest
+    #     except DuplicateError:
+    #         raise BadRequest('Username already exists')
 
 
-@user_ns.route('/option/') # <int:uid>
-class UserView(Resource):
-
-    def post(self):
-        """ Create user """
-        try:
-            user = user_service.create_alternative(**LoginValidator().load(request.json)) # create_alternative
-            return f'User {user} created'
-        except ValidationError:
-            raise BadRequest
-        except DuplicateError:
-            return 'Username already exists', 404
+# @user_ns.route('/option/') # <int:uid>
+# class UserView(Resource):
+#
+#     def post(self):
+#         """ Create user """
+#         try:
+#             user = user_service.create_alternative(**LoginValidator().load(request.json)) # create_alternative
+#             return f'User {user} created'
+#         except ValidationError:
+#             raise BadRequest
+#         except DuplicateError:
+#             return 'Username already exists', 404
