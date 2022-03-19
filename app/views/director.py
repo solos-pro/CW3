@@ -12,8 +12,9 @@ director_schema = DirectorSchema()
 @director_ns.route('/')
 class DirectorsView(Resource):
     @login_required
-    def get(self):
-        all_directors = director_service.get_all()
+    def get(self, token_data):
+        page_num = request.args.get("page")
+        all_directors = director_service.get_all(page_num)
         return director_schema.dump(all_directors, many=True), 200
 
     @admin_required

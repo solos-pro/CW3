@@ -2,6 +2,9 @@ from app.model.director import Director
 
 
 # CRUD
+from constants import ITEMS_PER_PAGE
+
+
 class DirectorDAO:
     def __init__(self, session):
         self.session = session
@@ -15,8 +18,11 @@ class DirectorDAO:
     def get_one(self, did):
         return self.session.query(Director).get(did)
 
-    def get_all(self):
-        return self.session.query(Director).all()
+    def get_all(self, page_num):
+        result = self.session.query(Director)
+        if page_num:
+            result = result.limit(ITEMS_PER_PAGE).offset((int(page_num) - 1) * ITEMS_PER_PAGE)
+        return result.all()
 
     def create(self, data):
         director = Director(**data)
