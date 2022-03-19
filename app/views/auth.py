@@ -13,22 +13,22 @@ class LoginValidator(Schema):
     password = fields.Str(required=True)
 
 
-@auth_ns.route('/')
+@auth_ns.route('/login')
 class AuthView(Resource):
     def post(self):
         """Create token"""
-        # try:
-        validated_data = LoginValidator().load(request.json)
-        user = user_service.get_by_email(validated_data['email'])
-        if not user:
-            print("None email")
-            abort(404)
+        try:
+            validated_data = LoginValidator().load(request.json)
+            user = user_service.get_by_email(validated_data['email'])
+            if not user:
+                print("None email")
+                abort(404)
 
-        token_data = jwt.JwtSchema().load({'user_id': user.id}) # , 'role': user.role_id
-        return jwt.JwtToken(token_data).get_tokens(), 201
+            token_data = jwt.JwtSchema().load({'user_id': user.id}) # , 'role': user.role_id
+            return jwt.JwtToken(token_data).get_tokens(), 201
 
-        # except ValidationError:
-        #     abort(400)
+        except ValidationError:
+            abort(400)
 
     def put(self):
         """Update token"""
@@ -38,9 +38,27 @@ class AuthView(Resource):
             if not data:
                 abort(404)
 
-            token_data = jwt.JwtSchema().load({'user_id': data['user_id'], 'role': data['role'], 'exp': data['exp']}) #
+            token_data = jwt.JwtSchema().load({'user_id': data['user_id'], 'exp': data['exp']}) # , 'role': data['role']
             return jwt.JwtToken(token_data).get_tokens(), 201
 
         except ValidationError as e:
             print(str(e))
+            abort(400)
+
+
+@auth_ns.route('/register')
+class AuthRegisterView(Resource):
+    def post(self):
+        """Create token"""
+        try:
+            validated_data = LoginValidator().load(request.json)
+            user = user_service.get_by_email(validated_data['email'])
+            if not user:
+                print("None email")
+                abort(404)
+
+            token_data = jwt.JwtSchema().load({'user_id': user.id})  # , 'role': user.role_id
+            return jwt.JwtToken(token_data).get_tokens(), 201
+
+        except ValidationError:
             abort(400)
