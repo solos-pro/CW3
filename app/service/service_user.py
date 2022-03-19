@@ -21,6 +21,9 @@ class UserService:
 
         return self.dao.get_one_by_username(name)
 
+    def get_by_email(self, email) -> Optional[User]:
+        return self.dao.get_one_by_email(email)
+
     def create(self, name, password):
         return self.dao.create({
             "name": name,
