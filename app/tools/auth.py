@@ -18,7 +18,7 @@ def login_required(func):
 
         try:
             data = JwtToken.decode_token(auth_header.split("Bearer ")[-1])
-            print(data)
+            print(data, "- Bearer")
             data.pop("exp", None)
             token_data: Dict[int, Any] = JwtSchema().load(data)
             # token_data = JwtSchema().load(data)

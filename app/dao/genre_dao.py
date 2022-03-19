@@ -1,7 +1,10 @@
 from app.model.genre import Genre
-
+from constants import ITEMS_PER_PAGE
 
 # CRUD
+
+
+
 class GenreDAO:
     def __init__(self, session):
         self.session = session
@@ -15,8 +18,11 @@ class GenreDAO:
     def get_one(self, gid):
         return self.session.query(Genre).get(gid)
 
-    def get_all(self):
-        return self.session.query(Genre).all()
+    def get_all(self, page_num):
+        result = self.session.query(Genre)
+        if page_num:
+            result = result.limit(ITEMS_PER_PAGE).offset((int(page_num) - 1) * ITEMS_PER_PAGE)
+        return result.all()
 
     def create(self, data):
         genre = Genre(**data)

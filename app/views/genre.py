@@ -13,7 +13,8 @@ genre_schema = GenreSchema()
 class GenresView(Resource):
     @login_required
     def get(self, token_data):
-        all_genres = genre_service.get_all()
+        page_num = request.args.get("page")
+        all_genres = genre_service.get_all(page_num)
         return genre_schema.dump(all_genres, many=True), 200
 
     @admin_required
@@ -26,7 +27,13 @@ class GenresView(Resource):
 @genre_ns.route('/<int:gid>')
 class GenreView(Resource):
     @login_required
-    def get(self, gid):
+    def get(self, token_data, gid):
+        # TODO: How to exclude an argument "token_data"?
+        '''
+            File "CW3/app/tools/auth.py", line 26, in wrapper
+            return func(*args, **kwargs, token_data=token_data)
+            TypeError: get() got an unexpected keyword argument 'token_data
+        '''
         genre = genre_service.get_one(gid)
         if not genre:
             return "", 404
