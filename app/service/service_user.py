@@ -61,25 +61,18 @@ class UserService:
         if "favorite_genre_id" in data:
             user.favorite_genre_id = data["favorite_genre_id"]
 
-        print(user.name, type(user))
+        print(user.name, type(user)) # TODO: is it correct?
         return self.dao.update(user)
 
     def compare_password(self, data: Dict, uid: int):
         user = self.get_one(uid)
         print(user.password)
         return compare_passwords(user.password, data["password_1"])
+        # return user.password
 
     def update_password(self, data: Dict, uid: int):
         user = self.get_one(uid)
-
-        if "name" in data:
-            user.name = data["name"]
-        if "surname" in data:
-            user.surname = data["surname"]
-        if "favorite_genre_id" in data:
-            user.favorite_genre_id = data["favorite_genre_id"]
-
-        print(user.name, type(user))
+        user.password = get_password_hash(data["password_2"])
         return self.dao.update(user)
 
     def delete(self, mid):

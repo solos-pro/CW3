@@ -54,7 +54,8 @@ class UserDAO:
             raise DuplicateError
 
     def update(self, data):
-        user = data
+        user = data             # TODO: Is it correct?
+        print(user.password, " - WR to the db a password")
         self.session.add(user)
         self.session.commit()
         self.session.refresh(user)

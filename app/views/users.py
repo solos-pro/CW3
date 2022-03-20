@@ -49,11 +49,16 @@ class UserPasswView(Resource):
     def put(self, token_data):
         validated_data = PassUpdateValidator().load(request.json)
         user = user_service.get_one(token_data['user_id'])
-        # print(validated_data, "- validated_data")
+        print(validated_data, "- validated_data")
         if not user:
             return "", 404
-        result = user_service.compare_password(validated_data, token_data['user_id']) #
-        return result, 200 #
+        compare_passwords_OK = user_service.compare_password(validated_data, token_data['user_id']) #
+        if not compare_passwords_OK:
+            return "permission denied", 401
+        if compare_passwords_OK:
+            result = user_service.update_password(validated_data, token_data['user_id'])
+        return user_schema.dump(result), 200 #
+        # return validated_data, 200 #
 
 
     # def post(self):
