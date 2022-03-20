@@ -35,6 +35,10 @@ class AuthView(Resource):
                 print("None email")
                 abort(404)
 
+            compare_passwords_OK = user_service.compare_password({"password_1": validated_data["password"]}, user.id)  #
+            if not compare_passwords_OK:
+                return "permission denied", 401
+
             token_data = jwt.JwtSchema().load({'user_id': user.id})
             return jwt.JwtToken(token_data).get_tokens(), 201
 
