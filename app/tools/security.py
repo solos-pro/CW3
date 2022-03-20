@@ -28,10 +28,10 @@ def compare_passwords(password_hash, other_password):
 '''
 # ------------------------- test ------------------------- #
 passW = 'f8fsa65'
-hash_passw_digest = get_password_digest(passW)
+hash_passw_digest = get_password_digest(passW)          # create a HASH from a password in a string
 print(hash_passw_digest)
 
-hash_passw_digest_str = get_password_hash(passW)
+hash_passw_digest_str = get_password_hash(passW)        # create a HASH from a password in a bites (for bd)
 print(hash_passw_digest_str)
 
 print(base64.b64decode(hash_passw_digest_str))

@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, json
 from flask_restx import Resource, Namespace
 from marshmallow import ValidationError, Schema, fields
 from werkzeug.exceptions import BadRequest
@@ -43,6 +43,8 @@ class UserView(Resource):
         return user_schema.dump(result), 200 # , validated_data
 
 
+@user_ns.route('/password')
+class UserPasswView(Resource):
     @login_required
     def put(self, token_data):
         validated_data = PassUpdateValidator().load(request.json)
@@ -50,8 +52,8 @@ class UserView(Resource):
         # print(validated_data, "- validated_data")
         if not user:
             return "", 404
-        result = user_service.update_password(validated_data, token_data['user_id']) #
-        return user_schema.dump(result), 200 #
+        result = user_service.compare_password(validated_data, token_data['user_id']) #
+        return result, 200 #
 
 
     # def post(self):

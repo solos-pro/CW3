@@ -1,6 +1,6 @@
 from app.dao.user_dao import UserDAO
 from app.exceptions import DuplicateError
-from app.tools.security import get_password_hash
+from app.tools.security import get_password_hash, compare_passwords, get_password_digest
 from typing import Optional
 from app.dao.user_dao import User
 from typing import Any, Dict
@@ -51,16 +51,6 @@ class UserService:
             "favorite_genre_id": user["favorite_genre_id"]
         })
 
-    # def update(self, data):
-    #     uid = data.get("id")
-    #     user = self.dao.get_one_by_id(uid)
-    #
-    #     user.name = data.get("name")
-    #     user.surname = data.get("surname")
-    #     user.favorite_genre_id = data.get("favorite_genre_id")
-    #
-    #     return self.dao.update(user)
-
     def update_partial(self, data: Dict, uid: int):
         user = self.get_one(uid)
 
@@ -73,6 +63,11 @@ class UserService:
 
         print(user.name, type(user))
         return self.dao.update(user)
+
+    def compare_password(self, data: Dict, uid: int):
+        user = self.get_one(uid)
+        print(user.password)
+        return compare_passwords(user.password, data["password_1"])
 
     def update_password(self, data: Dict, uid: int):
         user = self.get_one(uid)
