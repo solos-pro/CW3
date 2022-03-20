@@ -35,7 +35,7 @@ class AuthView(Resource):
                 print("None email")
                 abort(404)
 
-            token_data = jwt.JwtSchema().load({'user_id': user.id}) # , 'role': user.role_id
+            token_data = jwt.JwtSchema().load({'user_id': user.id})
             return jwt.JwtToken(token_data).get_tokens(), 201
 
         except ValidationError:

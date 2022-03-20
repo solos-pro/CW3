@@ -51,17 +51,30 @@ class UserService:
             "favorite_genre_id": user["favorite_genre_id"]
         })
 
-    def update(self, data):
-        uid = data.get("id")
-        user = self.dao.get_one_by_id(uid)
-
-        user.name = data.get("name")
-        user.surname = data.get("surname")
-        user.favorite_genre_id = data.get("favorite_genre_id")
-
-        return self.dao.update(user)
+    # def update(self, data):
+    #     uid = data.get("id")
+    #     user = self.dao.get_one_by_id(uid)
+    #
+    #     user.name = data.get("name")
+    #     user.surname = data.get("surname")
+    #     user.favorite_genre_id = data.get("favorite_genre_id")
+    #
+    #     return self.dao.update(user)
 
     def update_partial(self, data: Dict, uid: int):
+        user = self.get_one(uid)
+
+        if "name" in data:
+            user.name = data["name"]
+        if "surname" in data:
+            user.surname = data["surname"]
+        if "favorite_genre_id" in data:
+            user.favorite_genre_id = data["favorite_genre_id"]
+
+        print(user.name, type(user))
+        return self.dao.update(user)
+
+    def update_password(self, data: Dict, uid: int):
         user = self.get_one(uid)
 
         if "name" in data:

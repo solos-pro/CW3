@@ -19,6 +19,11 @@ class PachUserValidator(Schema):
     favorite_genre_id = fields.Int()
 
 
+class PassUpdateValidator(Schema):
+    password_1 = fields.Str(required=True)
+    password_2 = fields.Str(required=True)
+
+
 @user_ns.route('/') # <int:uid>
 class UserView(Resource):
     @login_required
@@ -29,16 +34,24 @@ class UserView(Resource):
         return user_schema.dump(user)
 
     @login_required
-    def patch(self, token_data): #
+    def patch(self, token_data):
         validated_data = PachUserValidator().load(request.json)
         user = user_service.get_one(token_data['user_id'])
-        print(validated_data, "- validated_data")
         if not user:
             return "", 404
-        # request_json = request.json
         result = user_service.update_partial(validated_data, token_data['user_id']) #
-        # return user_schema.dump(result)
-        return user_schema.dump(user), 200 # , validated_data
+        return user_schema.dump(result), 200 # , validated_data
+
+
+    @login_required
+    def put(self, token_data):
+        validated_data = PassUpdateValidator().load(request.json)
+        user = user_service.get_one(token_data['user_id'])
+        # print(validated_data, "- validated_data")
+        if not user:
+            return "", 404
+        result = user_service.update_password(validated_data, token_data['user_id']) #
+        return user_schema.dump(result), 200 #
 
 
     # def post(self):
