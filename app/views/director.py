@@ -18,7 +18,7 @@ class DirectorsView(Resource):
         return director_schema.dump(all_directors, many=True), 200
 
     @admin_required
-    def post(self):
+    def post(self, token_data):
         r_json = request.json
         director_service.create(r_json)
         return "", 201
@@ -27,14 +27,14 @@ class DirectorsView(Resource):
 @director_ns.route('/<int:did>')
 class DirectorView(Resource):
     @login_required
-    def get(self, did):
+    def get(self, token_data, did):
         director = director_service.get_one(did)
         if not director:
             return "", 404
         return director_schema.dump(director)
 
     @admin_required
-    def put(self, did):
+    def put(self, token_data, did):
         reg_json = request.json
         reg_json["id"] = did
 
@@ -42,7 +42,7 @@ class DirectorView(Resource):
         return "", 204
 
     @admin_required
-    def patch(self, did):
+    def patch(self, token_data, did):
         reg_json = request.json
         reg_json["id"] = did
 
@@ -51,7 +51,7 @@ class DirectorView(Resource):
         return "", 204
 
     @admin_required
-    def delete(self, did):
+    def delete(self, token_data, did):
         director_service.delete(did)
 
         return "", 204

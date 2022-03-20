@@ -12,7 +12,7 @@ movie_schema_search = MovieSchemaSearch()
 @movie_ns.route('/')
 class MoviesView(Resource):
     @login_required
-    def get(self):
+    def get(self, token_data):
         search_request = {"director_id": request.args.get('director_id'),
                           "genre_id": request.args.get('genre_id'),
                           "status": request.args.get("status"),
@@ -22,7 +22,7 @@ class MoviesView(Resource):
         return movie_schema_search.dump(result, many=True), 200
 
     @admin_required
-    def post(self):
+    def post(self, token_data):
         r_json = request.json
         movie_service.create(r_json)
         return "", 201
@@ -30,26 +30,26 @@ class MoviesView(Resource):
 
 @movie_ns.route('/<int:mid>')
 class MovieView(Resource):
-    # @login_required
+    @login_required
     def get(self, mid):
         movie = movie_service.get_one(mid)
         return movie_schema.dump(movie, many=False)
 
     @admin_required
-    def put(self, mid):
+    def put(self, token_data, mid):
         reg_json = request.json
         reg_json["id"] = mid
         movie_service.update(reg_json)
         return "", 204
 
     @admin_required
-    def patch(self, mid):
+    def patch(self, token_data, mid):
         reg_json = request.json
         reg_json["id"] = mid
         movie_service.update_partial(reg_json)
         return "", 204
 
     @admin_required
-    def delete(self, mid: int):
+    def delete(self, token_data, mid: int):
         movie_service.delete(mid)
         return "", 204

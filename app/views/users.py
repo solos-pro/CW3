@@ -1,12 +1,9 @@
-from flask import request, json
+from flask import request
 from flask_restx import Resource, Namespace
-from marshmallow import ValidationError, Schema, fields
-from werkzeug.exceptions import BadRequest
+from marshmallow import Schema, fields
 
 from app.container import user_service
 from app.model.user import UserSchema
-from app.views.auth import LoginValidator
-from app.exceptions import DuplicateError
 from app.tools.auth import login_required
 
 user_ns = Namespace('users')
@@ -24,7 +21,7 @@ class PassUpdateValidator(Schema):
     password_2 = fields.Str(required=True)
 
 
-@user_ns.route('/') # <int:uid>
+@user_ns.route('/')
 class UserView(Resource):
     @login_required
     def get(self, token_data):
@@ -58,28 +55,5 @@ class UserPasswView(Resource):
         if compare_passwords_OK:
             result = user_service.update_password(validated_data, token_data['user_id'])
         return user_schema.dump(result), 200 #
-        # return validated_data, 200 #
 
 
-    # def post(self):
-    #     """ Create user """
-    #     try:
-    #         user_service.create(**LoginValidator().load(request.json))
-    #     except ValidationError:
-    #         raise BadRequest
-    #     except DuplicateError:
-    #         raise BadRequest('Username already exists')
-
-
-# @user_ns.route('/option/') # <int:uid>
-# class UserView(Resource):
-#
-#     def post(self):
-#         """ Create user """
-#         try:
-#             user = user_service.create_alternative(**LoginValidator().load(request.json)) # create_alternative
-#             return f'User {user} created'
-#         except ValidationError:
-#             raise BadRequest
-#         except DuplicateError:
-#             return 'Username already exists', 404

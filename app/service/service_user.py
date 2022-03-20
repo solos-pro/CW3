@@ -61,7 +61,6 @@ class UserService:
         if "favorite_genre_id" in data:
             user.favorite_genre_id = data["favorite_genre_id"]
 
-        print(user.name, type(user)) # TODO: is it correct?
         return self.dao.update(user)
 
     def compare_password(self, data: Dict, uid: int):

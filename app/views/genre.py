@@ -18,7 +18,7 @@ class GenresView(Resource):
         return genre_schema.dump(all_genres, many=True), 200
 
     @admin_required
-    def post(self):
+    def post(self, token_data):
         r_json = request.json
         genre_service.create(r_json)
         return "", 201
@@ -40,7 +40,7 @@ class GenreView(Resource):
         return genre_schema.dump(genre)
 
     @admin_required
-    def put(self, gid):
+    def put(self, token_data, gid):
         reg_json = request.json
         reg_json["id"] = gid
 
@@ -48,18 +48,18 @@ class GenreView(Resource):
 
         return "", 204
 
-    @admin_required
-    def patch(self, gid):
-        reg_json = request.json
-        reg_json["id"] = gid
-
-        genre_service.update_partial(reg_json)
-
-        return "", 204
-
-    @admin_required
-    def delete(self, gid):
-        genre_service.delete(gid)
-
-        return "", 204
+    # @admin_required
+    # def patch(self, gid):
+    #     reg_json = request.json
+    #     reg_json["id"] = gid
+    #
+    #     genre_service.update_partial(reg_json)
+    #
+    #     return "", 204
+    #
+    # @admin_required
+    # def delete(self, gid):
+    #     genre_service.delete(gid)
+    #
+    #     return "", 204
 
