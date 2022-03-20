@@ -27,17 +27,17 @@ def create_app(config: Config) -> Flask:
     return application
 
 
-app_config = Config()
-app = create_app(app_config)
-configure_app(app)
+# app_config = Config()
+# app = create_app(app_config)
+# configure_app(app)
 
 
-# if __name__ == '__main__':
-#
-#     app_config = Config()
-#     app = create_app(app_config)
-#     configure_app(app)
-#     app.run()
+if __name__ == '__main__':
+
+    app_config = Config()
+    app = create_app(app_config)
+    configure_app(app)
+    app.run()
 
 
 
