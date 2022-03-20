@@ -1,6 +1,6 @@
 from flask import request
 from flask_restx import Resource, Namespace
-from marshmallow import ValidationError
+from marshmallow import ValidationError, Schema, fields
 from werkzeug.exceptions import BadRequest
 
 from app.container import user_service
@@ -13,15 +13,33 @@ user_ns = Namespace('users')
 user_schema = UserSchema()
 
 
+class PachUserValidator(Schema):
+    name = fields.Str()
+    surname = fields.Str()
+    favorite_genre_id = fields.Int()
+
+
 @user_ns.route('/') # <int:uid>
 class UserView(Resource):
     @login_required
     def get(self, token_data):
-        print(token_data)
         user = user_service.get_one(token_data['user_id'])
         if not user:
             return "", 404
         return user_schema.dump(user)
+
+    @login_required
+    def patch(self, token_data): #
+        validated_data = PachUserValidator().load(request.json)
+        user = user_service.get_one(token_data['user_id'])
+        print(validated_data, "- validated_data")
+        if not user:
+            return "", 404
+        # request_json = request.json
+        result = user_service.update_partial(validated_data, token_data['user_id']) #
+        # return user_schema.dump(result)
+        return user_schema.dump(user), 200 # , validated_data
+
 
     # def post(self):
     #     """ Create user """

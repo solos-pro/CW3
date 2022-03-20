@@ -10,7 +10,7 @@ from app.exceptions import IncorrectData, DuplicateError
 class UserDAO:
     def __init__(self, session):
         self.session = session
-        self._roles = {"user", "admin"}
+        # self._roles = {"user", "admin"}
 
     # def create_role(self, role) -> int:
     #     group = Group(role=role)
@@ -53,14 +53,12 @@ class UserDAO:
         except IntegrityError:
             raise DuplicateError
 
-    def update_role(self, username: str, role: str):
-        if role not in self._roles:
-            raise IncorrectData
-
-        user = self.get_one_by_username(username)
-        user.role = role
-        self.session.delete(user)
+    def update(self, data):
+        user = data
+        self.session.add(user)
         self.session.commit()
+        self.session.refresh(user)
+        return user
 
     def update_password(self, username: str, password_hash: str):
         user = self.get_one_by_username(username)

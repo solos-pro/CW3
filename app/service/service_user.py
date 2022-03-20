@@ -3,6 +3,7 @@ from app.exceptions import DuplicateError
 from app.tools.security import get_password_hash
 from typing import Optional
 from app.dao.user_dao import User
+from typing import Any, Dict
 
 
 class UserService:
@@ -54,24 +55,24 @@ class UserService:
         uid = data.get("id")
         user = self.dao.get_one_by_id(uid)
 
-        user.username = data.get("username")
-        user.password = data.get("password")
-        user.role = data.get("role")
+        user.name = data.get("name")
+        user.surname = data.get("surname")
+        user.favorite_genre_id = data.get("favorite_genre_id")
 
-        self.dao.update(user)
+        return self.dao.update(user)
 
-    def update_partial(self, data):
-        uid = data.get("id")
+    def update_partial(self, data: Dict, uid: int):
         user = self.get_one(uid)
 
-        if "username" in data:
-            user.username = data.get("username")
-        if "password" in data:
-            user.password = data.get("password")
-        if "role" in data:
-            user.role = data.get("role")
+        if "name" in data:
+            user.name = data["name"]
+        if "surname" in data:
+            user.surname = data["surname"]
+        if "favorite_genre_id" in data:
+            user.favorite_genre_id = data["favorite_genre_id"]
 
-        self.dao.update(user)
+        print(user.name, type(user))
+        return self.dao.update(user)
 
     def delete(self, mid):
         self.dao.delete(mid)
