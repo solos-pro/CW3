@@ -31,7 +31,7 @@ class MoviesView(Resource):
 @movie_ns.route('/<int:mid>')
 class MovieView(Resource):
     @login_required
-    def get(self, mid):
+    def get(self, token_data, mid):
         movie = movie_service.get_one(mid)
         return movie_schema.dump(movie, many=False)
 

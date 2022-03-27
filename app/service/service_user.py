@@ -65,7 +65,7 @@ class UserService:
 
     def compare_password(self, data: Dict, uid: int):
         user = self.get_one(uid)
-        print(user.password)
+        # print(user.password)
         return compare_passwords(user.password, data["password_1"])
         # return user.password
 

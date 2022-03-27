@@ -24,22 +24,23 @@ class RegisterValidator(Schema):
     favorite_genre_id = fields.Int()
 
 
-@auth_ns.route('/login')
+@auth_ns.route('/login/')
 class AuthView(Resource):
     def post(self):
         """Create token"""
         try:
-            validated_data = LoginValidator().load(request.json)
-            user = user_service.get_by_email(validated_data['email'])
+            print("login")
+            validated_data = LoginValidator().load(request.json)            # проверяем поля json-данных
+            user = user_service.get_by_email(validated_data['email'])       # ищем пользователя в БД по "email" с целью получить user.id
             if not user:
-                print("None email")
+                # print("None email")
                 abort(404)
 
-            compare_passwords_OK = user_service.compare_password({"password_1": validated_data["password"]}, user.id)  #
+            compare_passwords_OK = user_service.compare_password({"password_1": validated_data["password"]}, user.id)  # сверяем пароли (введенный и в БД)
             if not compare_passwords_OK:
                 return "permission denied", 401
 
-            token_data = jwt.JwtSchema().load({'user_id': user.id})
+            token_data = jwt.JwtSchema().load({'user_id': user.id})         # если проверка логин + пароль успешна, возвращаем токены
             return jwt.JwtToken(token_data).get_tokens(), 201
 
         except ValidationError:
