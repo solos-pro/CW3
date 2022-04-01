@@ -1,5 +1,7 @@
 from marshmallow import Schema, fields
 from app.database import db
+from app.model.genre import GenreSchema
+from app.model.director import DirectorSchema
 
 # TODO: Why class Genre isn't imported from a genre-model?
 
@@ -19,22 +21,22 @@ class Movie(db.Model):
 
 
 class MovieSchema(Schema):
-    id = fields.Int()
-    title = fields.Str()
-    name = fields.Str()
-    genre = fields.Str()
-    director = fields.Str()
-    description = fields.Str()
-    trailer = fields.Str()
-    year = fields.Int()
-    rating = fields.Float()
+    id = fields.Int(required=True)
+    title = fields.Str(required=True)
+    name = fields.Str(required=True)
+    genre = fields.Nested(GenreSchema)
+    director = fields.Nested(DirectorSchema)
+    description = fields.Str(required=True)
+    trailer = fields.Str(required=True)
+    year = fields.Int(required=True)
+    rating = fields.Float(required=True)
 
 
 class MovieSchemaSearch(Schema):
-    id = fields.Int()
-    title = fields.Str()
-    year = fields.Int()
-    rating = fields.Float()
-    genre_id = fields.Int()
-    director_id = fields.Int()
+    id = fields.Int(required=True)
+    title = fields.Str(required=True)
+    year = fields.Int(required=True)
+    rating = fields.Float(required=True)
+    genre = fields.Nested(GenreSchema)
+    director = fields.Nested(DirectorSchema)
 
